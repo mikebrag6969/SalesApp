@@ -1,0 +1,12 @@
+# ASP.NET files to ignore
+bin/
+obj/
+.vs/
+*.suo
+*.user
+*.cache
+*.pdb
+*.dbmdl
+*.log
+*.ldf
+*.mdf
