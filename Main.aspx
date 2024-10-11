@@ -64,27 +64,61 @@
             loadOrders();
 
             $('#btnSearch').click(function () {
+                // Clear any previous error message
+                $('#errorMessage').text('');
+
+                // Retrieve search criteria
+                let dateType = $('#dateType').val();
+                let startDate = $('#startDate').val();
+                let endDate = $('#endDate').val();
+
+                // Perform validations
+                let validationPassed = true;
+                let errorMessage = '';
+
+                // Check if the user selected a date type
+                if (!dateType) {
+                    errorMessage = 'אנא בחר סוג תאריך.';
+                    validationPassed = false;
+                }
+
+                // Check if both start date and end date are selected
+                if (!startDate || !endDate) {
+                    errorMessage = 'אנא בחר תאריכי התחלה וסיום.';
+                    validationPassed = false;
+                } else if (new Date(startDate) > new Date(endDate)) {
+                    // Ensure end date is not earlier than start date
+                    errorMessage = 'תאריך הסיום אינו יכול להיות מוקדם מתאריך ההתחלה.';
+                    validationPassed = false;
+                }
+
+                // If validation failed, show the error message and log it
+                if (!validationPassed) {
+                    $('#errorMessage').text(errorMessage);
+                    console.log(`Validation error: ${errorMessage}`);
+                    return; // Stop further execution if validation fails
+                }
+
+                // If all validations pass, log the search criteria to the console
+                console.log(`Search criteria - Date Type: ${dateType}, Start Date: ${startDate}, End Date: ${endDate}, Delivery Status: ${deliveryStatus}`);
+
+                // Execute search with valid criteria
+
+
+
+
+
+
+
+
                 deliveryStatus = $('#deliveryStatus').val();
-                alert("deliveryStatus", deliveryStatus)
+       
                 loadOrders();
 
             });
 
           
-
-
-            //$('#btnToggleSearch').click(function () {
-            //    $('#advancedSearchPanel').toggle();
-            //});
-
-
-
-
-
-
-
-
-
+  
             function loadOrders() {
                 let dateType = $('#dateType').val();
                 let startDate = $('#startDate').val();
@@ -283,7 +317,7 @@ body {
 h3 {
     color: #2f3e46;
     font-weight: 600;
-    margin-top: 0;
+ 
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -312,7 +346,7 @@ button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+ 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
@@ -524,6 +558,9 @@ tr:nth-child(odd) {
         </select><br />
 
         <button id="btnSearch">חיפוש</button>
+
+        <div id="errorMessage" style="color: red; font-weight: bold; margin-top: 10px;"></div>
+
     </div>
  
 

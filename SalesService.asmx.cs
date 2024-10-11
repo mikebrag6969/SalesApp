@@ -58,7 +58,7 @@ namespace SalesDataApp
 
             using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
             {
-                SqlCommand cmd = new SqlCommand("GetOrdersByDeliveryStatus", conn);
+                SqlCommand cmd = new SqlCommand("sp_getOrdersByDeliveryStatus", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@DateType", dateType);
