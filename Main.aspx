@@ -10,6 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript">
 
+        let deliveryStatus = "Late"; // Default value for initial load
+        let orderIds = [];
+        let daysDifferences = [];
+
         function parseAspNetJsonDate(dateString) {
             let timestamp = parseInt(dateString.replace(/\/Date\((\d+)\)\//, "$1"), 10);
 
@@ -47,7 +51,7 @@
                             table += '<tr><td>' + product.ProductName + '</td><td>' + product.City + '</td><td>' + product.TotalSales + '</td></tr>';
                         });
                         table += '</table>';
-                        $('#divTopTenProductsRes').html(table);
+                        $('#topProductsDiv').html(table);
                     },
                     error: function (xhr, status, error) {
                         console.log("Error: " + error);
@@ -56,23 +60,32 @@
 
 
 
-            // Set default delivery status to "Late" and perform initial load
-            loadOrders("Late");
+            // default delivery status to "Late" and perform initial load
+            loadOrders();
 
             $('#btnSearch').click(function () {
-                let deliveryStatus = $('#deliveryStatus').val();
-                loadOrders(deliveryStatus);
+                deliveryStatus = $('#deliveryStatus').val();
+                alert("deliveryStatus", deliveryStatus)
+                loadOrders();
 
             });
 
           
 
 
-            $('#btnToggleSearch').click(function () {
-                $('#advancedSearchPanel').toggle();
-            });
+            //$('#btnToggleSearch').click(function () {
+            //    $('#advancedSearchPanel').toggle();
+            //});
 
-            function loadOrders(deliveryStatus) {
+
+
+
+
+
+
+
+
+            function loadOrders() {
                 let dateType = $('#dateType').val();
                 let startDate = $('#startDate').val();
                 let endDate = $('#endDate').val();
@@ -93,32 +106,38 @@
 
                         if (orders.length === 0) {
                             // Display a message if no orders are found
-                            $('#ordersSearchRes').html("<p>לא נמצאו הזמנות לחיפוש</p>");
-                            $('#orderChart').hide(); // Hide the chart if no data is available
+                            $('#ordersSearchDiv').html("<p>לא נמצאו הזמנות לחיפוש</p>");
+                            $('#dashboardPanel').hide(); // Hide the chart if no data is available
+
+                   
+                     
+
+
                             return;
                         }
 
-                        $('#orderChart').show(); // Show the chart if data is available
+           
 
 
                         let table = '<table border="1"><tr><th>מס. הזמנה</th><th>ת. הזמנה</th><th>ת. אספקה מבוקש</th><th>ת. אספקה בפועל</th><th>הפרש ימים</th><th>סטטוס</th></tr>';
 
 
                     
-                        let orderIds = [];
-                        let daysDifferences = [];
+                       orderIds = [];
+                   daysDifferences = [];
 
                         // Populate arrays for order IDs and days differences
                         orders.forEach(order => {
                             orderIds.push(order.OrderID);
                             daysDifferences.push(order.DaysDifference);
                         });
+ 
 
-                        // Render the chart
-                        renderChart(orderIds, daysDifferences, deliveryStatus);
-
-
-
+ 
+                        // Render the chart only if the dashboard is open
+                        if ($('#dashboardPanel').is(':visible')) {
+                            renderChart(orderIds, daysDifferences, deliveryStatus);
+                        }
 
 
 
@@ -145,7 +164,7 @@
                         });
 
                         table += '</table>';
-                        $('#ordersSearchRes').html(table);
+                        $('#ordersSearchDiv').html(table);
                     },
                     error: function (xhr, status, error) {
                         console.error("Error:", error);
@@ -153,6 +172,41 @@
                 });
             }
  
+
+
+
+
+
+
+            // Toggle Advanced Search Panel
+            $('#btnToggleSearch').click(function () {
+                const $panel = $('#advancedSearchPanel');
+                const $icon = $('#toggleIcon');
+
+                $panel.toggle();
+                $icon.text($panel.is(':visible') ? '-' : '+');
+            });
+
+            // Toggle Dashboard Panel
+            $('#btnToggleDashboard').click(function () {
+                const $panel = $('#dashboardPanel');
+                const $icon = $('#toggleIconDashboard');
+
+                $panel.toggle();
+                $icon.text($panel.is(':visible') ? '-' : '+');
+
+
+                // Render the chart if data is already loaded and dashboard is now visible
+                if ($panel.is(':visible') && orderIds.length > 0 && daysDifferences.length > 0) {
+                    renderChart(orderIds, daysDifferences, deliveryStatus);
+                }
+
+            });
+
+
+
+
+
 
          
         });
@@ -170,7 +224,7 @@
                 window.orderChart.destroy();
             }
             // Define color based on delivery status
-            let backgroundColor = (deliveryStatus === "Late") ? 'red' : 'green';
+            let backgroundColor = (deliveryStatus === "Late") ? '#b71c1c' : '#00796b';
             let borderColor = (deliveryStatus === "Late") ? 'darkred' : 'darkgreen';
 
 
@@ -205,6 +259,9 @@
                     }
                 }
             });
+            $('#dashboardPanel').show(); // Show the chart if data is available
+
+            $('#orderChart').show()
         }
 
 
@@ -250,41 +307,7 @@ button:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* Advanced Search Panel Styling */
-#advancedSearchPanel {
-    background: linear-gradient(135deg, #f0f7fa, #dae8ef);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-}
-
-#advancedSearchPanel label {
-    font-weight: bold;
-    margin-top: 10px;
-    display: block;
-    color: #2f3e46;
-}
-
-#advancedSearchPanel input,
-#advancedSearchPanel select {
-    padding: 8px;
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border: 1px solid #b0c4ce;
-    background-color: #fdfdfd;
-    transition: border-color 0.3s;
-}
-
-#advancedSearchPanel input:focus,
-#advancedSearchPanel select:focus {
-    border-color: #5da3e9;
-    outline: none;
-}
-
+ 
 /* Table Styling */
 table {
     width: 100%;
@@ -321,12 +344,13 @@ tr:nth-child(odd) {
 
 /* Status Colors */
 .late {
-    background-color: #fdecea !important; /* Light pastel red */
+     background-color: #f8d7da !important; /* Stronger pastel red */
+
     color: #b71c1c !important; /* Rich red text */
 }
 
 .early {
-    background-color: #e8f4f0 !important; /* Light pastel teal */
+    background-color: #cce4e0 !important; /* Stronger pastel teal */
     color: #00796b !important; /* Dark teal text */
 }
 
@@ -339,11 +363,146 @@ tr:nth-child(odd) {
     margin-top: 20px;
 }
         
+
+/* Header Styling */
+#siteHeader {
+    background: linear-gradient(90deg, #cfe3e8, #9fbac6); /* Light misty blue gradient */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-bottom: 1px solid #8fa5af;
+}
+
+#siteHeader h1 {
+    color: #2f3e46; /* Dark slate gray */
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 1px; /* Slight letter spacing for elegance */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Soft shadow for text depth */
+}
+
+
+
+
+ 
+
+ /* Toggle Button Styling */
+#btnToggleSearch, #btnToggleDashboard {
+    background-color: #5da3e9;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+    width: 100%; /* Full-width button for a long, rectangular look */
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#btnToggleSearch:hover {
+    background-color: #417fb8;
+}
+
+/* Icon Styling */
+#toggleIcon,#toggleIconDashboard {
+    position: absolute;
+    left: 15px; /* Keeps the icon consistently on the left */
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Text Styling */
+#toggleText, #toggleTextDashboard {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* Flexbox for responsive input layout */
+#advancedSearchPanel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px; /* Space between items */
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f7fa, #dae8ef);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+}
+
+#advancedSearchPanel label {
+    font-weight: bold;
+ 
+    color: #2f3e46;
+}
+
+#advancedSearchPanel input,
+#advancedSearchPanel select {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #b0c4ce;
+    background-color: #fdfdfd;
+    transition: border-color 0.3s;
+    min-width: 150px; /* Ensures each element has enough space */
+}
+
+#advancedSearchPanel input:focus,
+#advancedSearchPanel select:focus {
+    border-color: #5da3e9;
+    outline: none;
+}
+
+/* Button styling */
+#advancedSearchPanel button {
+    background: linear-gradient(135deg, #5da3e9, #417fb8);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 0px;
+}
+}
+
+#advancedSearchPanel button:hover {
+    background: linear-gradient(135deg, #417fb8, #356a98);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #advancedSearchPanel {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+
+
+
+
     </style>
 </head>
 <body>
-
-     <button id="btnToggleSearch">חיפוש מתקדם</button>
+    <header id="siteHeader">
+    <h1>SalesApp</h1>
+</header>
+<!-- Toggle Button for Advanced Search with icon and text alignment -->
+<button id="btnToggleSearch">
+    <span id="toggleIcon">+</span>
+    <span id="toggleText">חיפוש מתקדם</span>
+</button>
     <div id="advancedSearchPanel" style="display: none;">
         <label for="dateType">סוג תאריך:</label>
         <select id="dateType">
@@ -368,19 +527,37 @@ tr:nth-child(odd) {
     </div>
  
 
+    <!-- Dashboard Button and Panel -->
+<button id="btnToggleDashboard" >
+    <span id="toggleIconDashboard">+</span>
+    <span id="toggleTextDashboard">דשבורד</span>
+</button>
+
+<div id="dashboardPanel" style="display: none;">
+
+        <canvas id="orderChart"  style="display: none;"></canvas>
+    <!-- Include any specific dashboard charts or summary metrics here -->
+</div>
 
 
-    <div id="divTopTenProductsRes"></div>
 
-
-
-    <div id="orderSearchResults">
+    <!-- Orders Table -->
     <h3>תוצאות חיפוש של הזמנות</h3>
-    <div id="ordersSearchRes">
-        <!-- Table for order search results -->
-    </div>
-    <!-- Canvas for the chart -->
-    <canvas id="orderChart" width="400" height="200"></canvas>
+<div id="ordersSearchDiv">
+    <!-- Orders data will populate here based on search -->
+</div>
+
+<!-- Top 10 Products Section -->
+<h3>עשרת המוצרים המובילים לפי עיר</h3>
+<div id="topProductsDiv">
+    <!-- Top 10 Products data will populate here -->
+</div>
+
+
+
+ 
+
+
 </div>
 </body>
 </html>
