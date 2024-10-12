@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: "POST",
-        url: "https://localhost:44339/SalesService.asmx/GetTopSellingProducts",
+        url: "https://localhost:44339/ProductService.asmx/GetTopSellingProducts",
         /*         data: JSON.stringify({ city: city }),*/
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -44,7 +44,7 @@ function loadOrders() {
 
     $.ajax({
         type: "POST",
-        url: "https://localhost:44339/SalesService.asmx/GetOrdersByDeliveryStatus",
+        url: "https://localhost:44339/OrderService.asmx/GetOrdersByDeliveryStatus",
         data: JSON.stringify({
             dateType: dateType,
             startDate: startDate,

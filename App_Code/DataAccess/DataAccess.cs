@@ -4,6 +4,9 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Diagnostics;
+using SalesDataApp.CustomExceptions;
+
+
 
 namespace SalesDataApp.Data
 {
@@ -19,7 +22,7 @@ namespace SalesDataApp.Data
         public List<T> ExecuteReader<T>(SqlCommand command) where T : new()
         {
             var results = new List<T>();
-
+ 
             try
             {
                 using (var conn = new SqlConnection(_connectionString))
@@ -49,13 +52,13 @@ namespace SalesDataApp.Data
             }
             catch (SqlException sqlEx)
             {
-                LogError(sqlEx); // Log SQL-related issues
-                throw new Exception("Database operation failed. Please contact support."); // Re-throw a user-friendly message
+                LogError(sqlEx);
+                throw new SalesDataAccessException("A database operation failed.", sqlEx);
             }
             catch (Exception ex)
             {
-                LogError(ex); // Log any other generic issues
-                throw new Exception("An error occurred. Please try again later.");
+                LogError(ex);
+                throw new SalesOperationFailedException("An unexpected error occurred.", ex);
             }
 
             return results;

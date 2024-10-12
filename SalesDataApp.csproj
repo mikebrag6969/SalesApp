@@ -73,11 +73,22 @@
     <Content Include="js\main.js" />
     <Content Include="js\utils.js" />
     <Content Include="Main.aspx" />
+    <Content Include="OrderService.asmx" />
+    <Content Include="ProductService.asmx" />
     <Content Include="SalesService.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\DataAccess.cs" />
+    <Compile Include="App_Code\DataAccess\DataAccess.cs" />
+    <Compile Include="App_Code\CustomExceptions\SalesDataAccessException.cs" />
+    <Compile Include="App_Code\CustomExceptions\SalesOperationFailedException.cs" />
+    <Compile Include="OrderService.asmx.cs">
+      <DependentUpon>OrderService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Services\OrderServiceHandler.cs" />
+    <Compile Include="Services\ProductServiceHandler.cs" />
+    <Content Include="Services\clas.cs" />
     <Compile Include="Main.aspx.cs">
       <DependentUpon>Main.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -85,8 +96,12 @@
     <Compile Include="Main.aspx.designer.cs">
       <DependentUpon>Main.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\ProductSales.cs" />
+    <Compile Include="App_Code\Models\Order.cs" />
+    <Compile Include="App_Code\Models\ProductSales.cs" />
+    <Compile Include="ProductService.asmx.cs">
+      <DependentUpon>ProductService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesService.asmx.cs">
       <DependentUpon>SalesService.asmx</DependentUpon>

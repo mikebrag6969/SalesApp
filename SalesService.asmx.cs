@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Data;
+ 
 using SalesDataApp.Data;
 using System.Web.Services;
 using SalesDataApp.Models;
+using System.Web;
+using SalesDataApp.CustomExceptions;
 
 namespace SalesDataApp
 {
@@ -25,13 +27,25 @@ namespace SalesDataApp
         [WebMethod]
         public List<ProductSales> GetTopSellingProducts()
         {
- 
-            using (var cmd = new SqlCommand("sp_getTopSellingProductsByCity"))
+            try
             {
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                return _dataAccess.ExecuteReader<ProductSales>(cmd);
+                using (var cmd = new SqlCommand("sp_getTopSellingProductsByCity"))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    return _dataAccess.ExecuteReader<ProductSales>(cmd);
+                }
             }
 
+            catch (SalesDataAccessException ex)
+            {
+                //LogError(ex); 
+                throw new HttpException(500, "Database error. Please contact support.");
+            }
+            catch (SalesOperationFailedException ex)
+            {
+                //LogError(ex);
+                throw new HttpException(500, "An unexpected error occurred. Please try again later.");
+            }
 
         }
 
