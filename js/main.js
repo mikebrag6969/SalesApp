@@ -83,7 +83,7 @@ function displayOrders(orders) {
 
     if (orders.length === 0) {
         // Display a message if no orders are found
-        $('#ordersSearchDiv').html("<p>לא נמצאו הזמנות לחיפוש</p>");
+        $('#ordersSearchDiv').html("<p>לא נמצאו הזמנות</p>");
         $('#dashboardPanel').hide(); // Hide the chart if no data is available
 
         return;

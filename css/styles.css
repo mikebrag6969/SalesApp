@@ -239,13 +239,13 @@ tr:nth-child(odd) {
     height: auto !important;
  
     max-height: 500px;
-    min-height: 350px;
+/*    min-height: 350px;*/
     margin: auto;
     display: block;
 }
 
 
-#ordersSearchDiv {
+#ordersSearchDiv, #topProductsDiv {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
 }

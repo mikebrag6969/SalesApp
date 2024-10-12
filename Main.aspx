@@ -72,7 +72,7 @@
 
 
     <!-- Orders Table -->
-    <h3>תוצאות חיפוש של הזמנות</h3>
+    <h3>רשימת הזמנות</h3>
 <div id="ordersSearchDiv">
     <!-- Orders data will populate here based on search -->
 </div>

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
-using System.Linq;
-using System.Web;
+using SalesDataApp.Data;
 using System.Web.Services;
 using SalesDataApp.Models;
 
@@ -20,32 +19,20 @@ namespace SalesDataApp
    [System.Web.Script.Services.ScriptService]
     public class SalesService : System.Web.Services.WebService
     {
+        private readonly DataAccess _dataAccess = new DataAccess();
+
 
         [WebMethod]
         public List<ProductSales> GetTopSellingProducts()
         {
-            List<ProductSales> products = new List<ProductSales>();
-            string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                SqlCommand cmd = new SqlCommand("sp_getTopSellingProductsByCity", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
  
-
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    products.Add(new ProductSales
-                    {
-                        ProductName = reader["ProductName"].ToString(),
-                        City = reader["City"].ToString(),
-                        TotalSales = Convert.ToInt32(reader["TotalSales"])
-                    });
-                }
+            using (var cmd = new SqlCommand("sp_getTopSellingProductsByCity"))
+            {
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                return _dataAccess.ExecuteReader<ProductSales>(cmd);
             }
-            return products;
+
+
         }
 
 
@@ -54,39 +41,18 @@ namespace SalesDataApp
         [WebMethod]
         public List<Order> GetOrdersByDeliveryStatus(string dateType, DateTime startDate, DateTime endDate, string deliveryStatus)
         {
-            var orders = new List<Order>();
-
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            using (var cmd = new SqlCommand("sp_getOrdersByDeliveryStatus"))
             {
-                SqlCommand cmd = new SqlCommand("sp_getOrdersByDeliveryStatus", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@DateType", dateType);
                 cmd.Parameters.AddWithValue("@StartDate", startDate);
                 cmd.Parameters.AddWithValue("@EndDate", endDate);
                 cmd.Parameters.AddWithValue("@DeliveryStatus", deliveryStatus);
 
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        orders.Add(new Order
-                        {
-                            OrderID = reader.GetInt32(0),
-                            CustomerID = reader.GetInt32(1),
-                            ProductID = reader.GetInt32(2),
-                            Quantity = reader.GetInt32(3),
-                            OrderDate = reader.GetDateTime(4),
-                            RequestedDeliveryDate = reader.GetDateTime(5),
-                            ActualDeliveryDate = reader.GetDateTime(6),
-                            DaysDifference = reader.GetInt32(7)
-                        });
-                    }
-                }
+                return _dataAccess.ExecuteReader<Order>(cmd);
             }
 
-            return orders;
         }
 
 
