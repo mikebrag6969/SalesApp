@@ -28,6 +28,21 @@ namespace SalesDataApp.Services
         {
             try
             {
+
+                // Validate input parameters
+                if (string.IsNullOrEmpty(dateType) || string.IsNullOrEmpty(deliveryStatus))
+                {
+                    throw new ArgumentException("DateType and DeliveryStatus must be provided.");
+                }
+
+                if (startDate == default || endDate == default)
+                {
+                    throw new ArgumentException("StartDate and EndDate must be valid dates.");
+                }
+
+
+
+
                 using (var cmd = new SqlCommand("sp_getOrdersByDeliveryStatus"))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;

@@ -122,7 +122,7 @@ function displayOrders(orders) {
 function setDefaultDateRange() {
     let today = new Date();
     let lastMonth = new Date();
-    lastMonth.setDate(today.getDate() - 30);
+    lastMonth.setDate(today.getDate() - 60);
 
     $('#startDate').val(lastMonth.toISOString().split("T")[0]);
     $('#endDate').val(today.toISOString().split("T")[0]);
