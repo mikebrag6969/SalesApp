@@ -1,0 +1,256 @@
+﻿ 
+/* Global Styling */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+    color: #333;
+    direction: rtl;
+    padding: 20px;
+    margin: 0;
+}
+
+h3 {
+    color: #2f3e46;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+button {
+    background: linear-gradient(135deg, #5da3e9, #417fb8); /* Blue gradient to match Ocean Mist */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+    button:hover {
+        background: linear-gradient(135deg, #417fb8, #356a98);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* Header Styling */
+th {
+    background: linear-gradient(180deg, #cfe3e8, #9fbac6); /* Light misty blue to gray-blue */
+    color: #2f3e46; /* Dark slate gray text */
+    font-weight: 600;
+    border-bottom: 1px solid #8fa5af; /* Soft gray-blue border */
+}
+
+/* Row Styling */
+tr:nth-child(even) {
+    background-color: #f7f9fc;
+}
+
+tr:nth-child(odd) {
+    background-color: #eef2f7;
+}
+
+/* Status Colors */
+.late {
+    background-color: #f8d7da !important; /* Stronger pastel red */
+
+    color: #b71c1c !important; /* Rich red text */
+}
+
+.early {
+    background-color: #cce4e0 !important; /* Stronger pastel teal */
+    color: #00796b !important; /* Dark teal text */
+}
+
+/* Chart Container */
+#orderChart {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 20px;
+}
+
+
+/* Header Styling */
+#siteHeader {
+    background: linear-gradient(90deg, #cfe3e8, #9fbac6); /* Light misty blue gradient */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-bottom: 1px solid #8fa5af;
+}
+
+    #siteHeader h1 {
+        color: #2f3e46; /* Dark slate gray */
+        font-size: 32px;
+        font-weight: 700;
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+        letter-spacing: 1px; /* Slight letter spacing for elegance */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Soft shadow for text depth */
+    }
+
+
+
+
+
+
+/* Toggle Button Styling */
+#btnToggleSearch, #btnToggleDashboard {
+    background-color: #5da3e9;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+    width: 100%; /* Full-width button for a long, rectangular look */
+    position: relative;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    #btnToggleSearch:hover {
+        background-color: #417fb8;
+    }
+
+/* Icon Styling */
+#toggleIcon, #toggleIconDashboard {
+    position: absolute;
+    left: 15px; /* Keeps the icon consistently on the left */
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Text Styling */
+#toggleText, #toggleTextDashboard {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+/* Flexbox for responsive input layout */
+#advancedSearchPanel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px; /* Space between items */
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f7fa, #dae8ef);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+}
+
+    #advancedSearchPanel label {
+        font-weight: bold;
+        color: #2f3e46;
+    }
+
+    #advancedSearchPanel input,
+    #advancedSearchPanel select {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #b0c4ce;
+        background-color: #fdfdfd;
+        transition: border-color 0.3s;
+        min-width: 150px; /* Ensures each element has enough space */
+    }
+
+        #advancedSearchPanel input:focus,
+        #advancedSearchPanel select:focus {
+            border-color: #5da3e9;
+            outline: none;
+        }
+
+    /* Button styling */
+    #advancedSearchPanel button {
+        background: linear-gradient(135deg, #5da3e9, #417fb8);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 15px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 0px;
+    }
+
+}
+
+#advancedSearchPanel button:hover {
+    background: linear-gradient(135deg, #417fb8, #356a98);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #advancedSearchPanel {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+
+
+
+
+/* Responsive styling for dashboard container */
+#dashboardPanel {
+    margin: 0 auto; /* Center-align the container */
+    padding: 20px;
+    background: #ffffff; /* Background color */
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    transition: width 0.3s ease; /* Smooth resize */
+}
+
+
+
+
+/* Responsive canvas */
+#orderChart {
+    width: 100% !important;
+    max-width: 100%;
+    height: auto !important;
+ 
+    max-height: 500px;
+    min-height: 350px;
+    margin: auto;
+    display: block;
+}
+
+
+#ordersSearchDiv {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+}
+ 
+
+
+
+ 
